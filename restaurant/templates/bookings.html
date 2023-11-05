@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+  <article>
+    <h1>All Reservations</h1>
+    <!--Begin row-->
+    <div class="row">
+      <!--Begin col-->
+      <div class="column">
+        <table id="bookings-table">
+          <tr>
+            <th>Name</th>
+            <th>Time</th>
+            <th>Date</th>
+            
+          </tr>
+         
+        </table>
+        
+      </div>
+      <!--End col-->
+
+      <!--Begin col-->
+      <!-- <div class="column">
+        <div class="videowrap">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11898.289517452584!2d-87.60853049433447!3d41.79442860243028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e2912ce6f7027%3A0xc0cfb5545d4a37b2!2sHyde%20Park%2C%20Chicago%2C%20IL%2C%20USA!5e0!3m2!1sen!2spt!4v1662384760663!5m2!1sen!2spt"
+            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div> -->
+      <!--End col-->
+    </div>
+    <!--End row-->
+
+
+
+
+  </article>
+</section>
+<script>
+  const bookings = JSON.parse('{{ bookings|safe }}')
+  console.log(bookings);
+  
+  for (const index in bookings) {
+    first_name = bookings[index]['fields']['first_name']
+    reservation_date = bookings[index]['fields']['reservation_date']
+    reservation_slot = bookings[index]['fields']['reservation_slot']
+    // const pretty_json = JSON.stringify(bookings[index]['fields'],null,2)
+    // var textNode = document.createTextNode(first_name + " " + reservation_date + " " + reservation_slot + "\n\n");
+    const row = document.createElement('tr');
+    const td_first_name = document.createElement('td')
+    const td_reservation_date = document.createElement('td')
+    const td_reservation_slot = document.createElement('td')
+    td_first_name.textContent = first_name
+    td_reservation_date.textContent = reservation_date
+    td_reservation_slot.textContent = formatTime(reservation_slot)
+
+    row.appendChild(td_first_name)
+    row.appendChild(td_reservation_slot)
+    row.appendChild(td_reservation_date)
+    
+
+    document.getElementById('bookings-table').appendChild(row)
+  }
+  // document.getElementById('bookings').innerHTML = pretty_json
+  
+
+  function formatTime(time) {
+    const ampm = time < 12 ? 'AM' : 'PM';
+    // includes 3 conditions, time<12, time == 12, time>12
+    const t = time < 12 ? time : (time > 12 ? time - 12 : time);
+    return `${t}:00 ${ampm}`;
+  }
+</script>
+
+{% endblock %}
+

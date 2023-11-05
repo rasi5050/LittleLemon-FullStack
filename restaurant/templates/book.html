@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+  <article>
+    <h1>Make a reservation</h1>
+    <!--Begin row-->
+    <div class="row">
+      <!--Begin col-->
+      <div class="column">
+          {% csrf_token %}
+          <form method="POST" id="form">
+            {% csrf_token %}
+            <p>
+              <label for="first_name">Name:</label>
+              <input type="text" placeholder="Your Name" maxlength="200" required id="first_name">
+            </p>
+            <p>
+            <!-- Step 9: Part one -->
+              <label for="reservation_date">Reservation date</label>
+              <input type="date" id="reservation_date">
+
+            </p>
+      
+            <p>
+              <label for="reservation_slot">Reservation time:</label>
+              <select id="reservation_slot">
+                <option value="0" disabled>Select time</option>
+              </select>
+            </p>
+            <button type="click" id="button">Reserve</button>
+          </form>
+      </div>
+      <!--End col-->
+
+      <!--Begin col-->
+      <div class="column">
+        <h2>Bookings For <span id="today"></span></h2>
+        <div id="bookings">
+          
+        </div>
+      </div>
+      <!--End col-->
+    </div>
+    <!--End row-->
+
+
+
+
+  </article>
+</section>
+<script>
+
+if (!localStorage.getItem('reservation_date')) {
+  const date = new Date()
+  document.getElementById('reservation_date').value = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate().toString().padStart(2, "0")}`
+  localStorage.setItem('reservation_date', document.getElementById('reservation_date').value);
+  console.log(document.getElementById('reservation_date').value)
+} else {
+  document.getElementById('reservation_date').value = localStorage.getItem('reservation_date')
+}
+  
+  getBookings()
+
+
+  /*  Step 10: Part two */
+
+  document.getElementById('reservation_date').addEventListener('change', getBookings)
+
+  function getBookings() {
+    // get date
+    // check bookings for the date
+    // display bookings
+
+    const date = document.getElementById('reservation_date').value;
+    localStorage.setItem('reservation_date', document.getElementById('reservation_date').value);
+    let reservation_slots = [];
+    document.getElementById('today').innerHTML = date
+
+    fetch("{% url 'bookings' %}" + '?date=' + date)
+      .then(r => r.json())
+      .then(r_json => {
+        reserved_slots = [];
+        bookings_string = '';
+        for (const curr_booking of r_json) {
+          console.log(curr_booking);
+          reserved_slots.push(curr_booking.fields.reservation_slot);
+          bookings_string += `<p> ${curr_booking.fields.first_name} - ${formatTime(curr_booking.fields.reservation_slot)}</p>`
+        }
+        var slot_options = '<option value="0" disabled>Select time</option>'
+        // restraunt opens from 8am-8pm
+        for (let i=8; i<21; i++) {
+          if (reserved_slots.includes(i)) {
+            slot_options += `<option value="${i}"" disabled>${formatTime(i)}</option>`
+          }
+          else {
+            slot_options += `<option value="${i}"">${formatTime(i)}</option>`
+          }
+        }
+        document.getElementById('reservation_slot').innerHTML = slot_options;
+        if (bookings_string=='') {
+          bookings_string = 'No bookings';
+        }
+        document.getElementById('bookings').innerHTML = bookings_string;
+      })
+  }
+
+
+  function formatTime(time) {
+    const ampm = time < 12 ? 'AM' : 'PM';
+    // includes 3 conditions, time<12, time == 12, time>12
+    const t = time < 12 ? time : (time > 12 ? time - 12 : time);
+    return `${t} ${ampm}`;
+  }
+
+
+  // event on submit button
+  // post event, take body, parse it , make fetch call to 'bookings'
+  document.getElementById('button').addEventListener('click', function(e) {
+    const form_data = {
+      first_name: document.getElementById('first_name').value,
+      reservation_date: document.getElementById('reservation_date').value,
+      reservation_slot: document.getElementById('reservation_slot').value,
+    }
+    fetch("{% url 'bookings' %}", {method: 'POST', body: JSON.stringify(form_data)})
+      .then(response => response.text())
+      .then(data => {
+        getBookings()
+      })
+  })
+</script>
+{% endblock %}
+
