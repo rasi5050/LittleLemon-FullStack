@@ -76,11 +76,12 @@ WSGI_APPLICATION = 'littlelemon.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'reservations',
-        'HOST' : '127.0.0.1',
+        'HOST' : 'littlelemon-mysql-db.ckinjqovttwl.us-east-1.rds.amazonaws.com',
         'PORT' : '3306',
         'USER': 'admindjango',
         'PASSWORD': 'employee@123!',
