@@ -14,3 +14,9 @@ sudo pip3 install virtualenv
 virtualenv myprojectenv
 
 source myprojectenv/bin/activate
+
+sudo yum install mariadb-devel
+sudo yum install gcc
+sudo yum install python3-devel
+pip3 install -r requirements.txt
+
