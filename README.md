@@ -20,3 +20,16 @@ sudo yum install gcc
 sudo yum install python3-devel
 pip3 install -r requirements.txt
 
+in settings.py, add host to ALLOWED_HOSTS
+python3 manage.py runserver 0.0.0.0:8000
+
+#modify httpd configuration
+cd /etc/httpd/conf.d/
+
+#set permissions
+sudo chown -R apache:apache /home/ec2-user/rasi-projects/LittleLemon-FullStack
+sudo chmod -R 755 /home/ec2-user/rasi-projects/LittleLemon-FullStack
+
+<!-- changed symlink python to python3 -->
+ sudo ln -s /usr/bin/python3 /usr/bin/python
+
