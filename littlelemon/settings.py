@@ -81,6 +81,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'reservations',
+        #'HOST': 'localhost', 
         'HOST' : 'littlelemon-mysql-db.ckinjqovttwl.us-east-1.rds.amazonaws.com',
         'PORT' : '3306',
         'USER': 'admindjango',
