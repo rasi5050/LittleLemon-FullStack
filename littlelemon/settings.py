@@ -88,7 +88,7 @@ DATABASES = {
         'HOST': env('DATABASE_NAME'),
         'PORT' : '3306',
         'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASS'),,
+        'PASSWORD': env('DATABASE_PASS'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
