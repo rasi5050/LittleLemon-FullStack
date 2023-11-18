@@ -33,3 +33,7 @@ sudo chmod -R 755 /home/ec2-user/rasi-projects/LittleLemon-FullStack
 <!-- changed symlink python to python3 -->
  sudo ln -s /usr/bin/python3 /usr/bin/python
 
+
+install pip3 -r requirements.txt as root user
+#set secrets as env variable
+ref: https://alicecampkin.medium.com/how-to-set-up-environment-variables-in-django-f3c4db78c55f
